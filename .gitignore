@@ -1,0 +1,66 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+🧠 Purpose of useStories.js
+
+useStories.js is a custom React Hook.
+
+In simple terms:
+
+It is the single source of truth for all story-related logic.
+
+Your UI components must NOT:
+
+Talk directly to localStorage
+
+Handle time calculations
+
+Know when stories expire
+
+Mutate story data
+
+All of that belongs here.
+
+🎯 What Problems useStories.js Solves
+1️⃣ Centralized State
+
+Holds the stories array
+
+Prevents duplicate logic across components
+
+2️⃣ 24-Hour Expiry Logic
+
+Automatically removes expired stories
+
+Ensures consistency on every app reload
+
+3️⃣ LocalStorage Sync
+
+Reads once on load
+
+Writes on every update
+
+4️⃣ Clean API for UI ->addStory(image)
+removeStory(id)

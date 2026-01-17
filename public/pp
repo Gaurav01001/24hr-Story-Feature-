@@ -1,0 +1,36 @@
+src/
+│
+├── components/
+│   ├── StoriesBar.jsx
+│   ├── AddStoryButton.jsx
+│   ├── StoryThumbnail.jsx
+│   ├── StoryViewer.jsx
+│   ├── StoryProgress.jsx
+│   └── ImageUploader.jsx
+│
+├── hooks/
+│   └── useStories.js
+│
+├── utils/
+│   ├── resizeImage.js
+│   ├── storage.js
+│   └── time.js
+│
+├── styles/
+│   ├── stories.css
+│   └── viewer.css
+│
+├── App.jsx
+└── main.jsx
+
+
+useStories (logic)
+      ↓
+App.jsx (state holder)
+      ↓
+StoriesBar
+  ├── AddStoryButton
+  └── StoryThumbnail
+      ↓
+StoryViewer
+      └── StoryProgress
