@@ -34,3 +34,17 @@ StoriesBar
       ↓
 StoryViewer
       └── StoryProgress
+
+
+
+
+////////////
+\Next steps will be:
+
+Load stories from localStorage
+
+Filter expired stories
+
+Persist updates
+
+Add addStory()
