@@ -1,15 +1,16 @@
-import { useStories } from "./Hooks/useStories";
+import { useStories } from "./hooks/useStories";
+import StoriesBar from "./Components/StoriesBar_1";
 
 function App() {
-  const { stories, addStory } = useStories();
+  const { stories } = useStories();
+
+  const handleAdd = (file) => {
+    console.log("Selected file:", file);
+  };
 
   return (
     <div>
-      <h1>Stories count: {stories.length}</h1>
-
-      <button onClick={() => addStory("base64-test-image")}>
-        Add Test Story
-      </button>
+      <StoriesBar stories={stories} onAdd={handleAdd} />
     </div>
   );
 }
