@@ -48,3 +48,15 @@ Filter expired stories
 Persist updates
 
 Add addStory()
+///////////////////
+AddStoryButton  →  App.jsx  →  ImageUploader  →  useStories
+        (File)        (File)        (base64)
+ImageUploader should:
+
+receive a File
+
+process it
+
+call onComplete(base64)
+
+That’s it.[file] → ImageUploader → (base64) → callback

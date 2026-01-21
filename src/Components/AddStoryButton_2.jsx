@@ -6,7 +6,7 @@ export default function AddStoryButton_2  ({onSelect}) {
         const file =e.target.files[0];
         if(!file) return;
 
-        onSelect;
+        onSelect(file);
         e.target.value = "";
     };
     
