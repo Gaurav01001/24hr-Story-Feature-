@@ -7,8 +7,29 @@ import StoryViewer_4 from "./Components/StoryViewer_4";
 function App() {
   const { stories, addStory } = useStories();
   const [selectedFile, setSelectedFile] = useState(null);
-  const [activeStory , setActiveStory] = useState(null);
+  const [activeIndex , setActiveIndex] = useState(null);
 
+  const openStory =(index)=>{
+    setActiveIndex(index);
+  }
+  const closeStory =()=>{
+    setActiveIndex(null);
+  }
+  const nextStory = ()=>{
+    if(activeIndex < stories.length -1 ){
+      setActiveIndex(activeIndex +1);
+
+    }else{
+      closeStory();
+    }
+  }
+  const prevStory=()=>{
+    if(activeIndex > 0){
+      setActiveIndex(activeIndex-1);
+    }else{
+      closeStory();
+    }
+  };
 
   const handleSelectFile = (file) => {
     setSelectedFile(file);
@@ -24,7 +45,7 @@ function App() {
       <StoriesBar_1
         stories={stories}
         onAdd={handleSelectFile}
-        onStoryClick={setActiveStory}
+        onStoryClick={openStory}
       />
 
       {selectedFile && (
@@ -33,12 +54,15 @@ function App() {
           onDone={handleImageDone}
         />
       )}
-      {activeStory && (
-        <StoryViewer_4
-        story={activeStory}
-        onClose={()=>setActiveStory(null)}
-        />
-      )}
+      {activeIndex !== null && (
+  <StoryViewer_4
+    story={stories[activeIndex]}
+    onNext={nextStory}
+    onPrev={prevStory}
+    onClose={closeStory}
+  />
+)}
+
     </div>
   );
 }

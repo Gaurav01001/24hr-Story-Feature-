@@ -6,11 +6,11 @@ export default function StoriesBar({ stories, onAdd, onStoryClick }) {
     <div className="stories-bar">
       <AddStoryButton_2 onSelect={onAdd} />
 
-      {stories.map((story) => (
+      {stories.map((story, index) => (
         <div
           key={story.id}
           className="story-thumbnail"
-          onClick={() => onStoryClick(story)}
+          onClick={() => onStoryClick(index)}
         >
           <img src={story.image} alt="story" />
         </div>
