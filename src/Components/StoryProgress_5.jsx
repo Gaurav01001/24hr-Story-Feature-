@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 //2 kam hai iska Show progress visually & Tell App when time is over
-
+import '../styles/viewer.css'
 
 export default function StoryProgress_5({duration, onComplete}){
     const [progressing ,setProgressing] = useState(0);

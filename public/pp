@@ -60,3 +60,44 @@ process it
 call onComplete(base64)
 
 That’s it.[file] → ImageUploader → (base64) → callback
+\\\\\\\\\\\\\\\\\
+
+STEP 1 → useStories.js
+
+👉 Change the data model from a flat stories[] to storyGroups[], so one circle can contain multiple stories.
+
+STEP 2 → useStories.js
+
+👉 Update addStory() so new stories are added to an existing group (or a new group), instead of creating a new circle every time.
+
+STEP 3 → App.jsx
+
+👉 Replace activeIndex with two indices: activeGroupIndex and activeStoryIndex to support nested navigation.
+
+STEP 4 → App.jsx
+
+👉 Update navigation logic so nextStory() first moves within a group, then moves to the next group, and finally closes the viewer.
+
+STEP 5 → StoriesBar.jsx
+
+👉 Render one circle per story group, not per individual story, and open the first story of that group on click.
+
+STEP 6 → StoryViewer.jsx
+
+👉 Read the currently active story using both indices (groupIndex + storyIndex) and display the correct image.
+
+STEP 7 → StoryViewer.jsx
+
+👉 Update progress completion behavior so it advances to the next story inside the group, not immediately to the next circle.
+
+STEP 8 → StoryProgress.jsx
+
+👉 No logic changes — reuse it as-is, now scoped to the current story segment.
+
+STEP 9 → viewer.css
+
+👉 Add support for multiple progress segments (one per story inside a group) for Instagram-style segmented bars.
+
+STEP 10 → StoriesBar.css
+
+👉 Add seen/unseen ring logic so a circle shows as “seen” only after all stories in that group are viewed.
