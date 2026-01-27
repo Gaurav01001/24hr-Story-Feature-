@@ -8,109 +8,97 @@ export function useStories() {
 
   useEffect(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
-    if (!stored) {
+    if (!stored) return;
+
+    try {
+      const parsed = JSON.parse(stored);
+
+      const validGroups = parsed
+        .map((group) => {
+          if (!Array.isArray(group.stories)) return null;
+
+          const validStories = group.stories.filter(
+            (story) => story.expiresAt > Date.now()
+          );
+
+          if (validStories.length === 0) return null;
+
+          return { ...group, stories: validStories };
+        })
+        .filter(Boolean);
+
+      setStoryGroups(validGroups);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(validGroups));
+    } catch (e) {
+      console.error("Failed to parse stories", e);
       setStoryGroups([]);
-      return;
     }
+  }, []);
 
-    try{
-      const parseGroups = JSON.parse(stored);
-//analyse (a string or text) into logical syntactic components:
-// "a user question input is parsed into an internal conceptual representation"
-    
-// Remove expired stories inside each group.
-/* const validGroups = parsedGroups
-  .map((group) => ({
-    ...group,
-    stories: group.stories.filter(
-      (story) => story.expiresAt > Date.now()
-    ),
-  }))
-  .filter((group) => group.stories.length > 0);
- this didnt worked idkw*/
-const validGroups = parseGroups
-  .map((group) => {
-    if (!Array.isArray(group.stories)) return null;
 
-    const validStories = group.stories.filter(
-      (story) => story.expiresAt > Date.now()
-    );
+  const fileToBase64 = (file) =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
 
-    if (validStories.length === 0) return null;
+  const createStoryObject = async (file) => {
+    const now = Date.now();
+    const isVideo = file.type.startsWith("video/");
+    const src = await fileToBase64(file);
 
     return {
-      ...group,
-      stories: validStories,
+      id: crypto.randomUUID(),
+      type: isVideo ? "video" :"image",
+      src,
+      createdAt:now,
+      expiresAt:now+DAY_IN_MS,
     };
-  })
-  .filter(Boolean);
-
-setStoryGroups(validGroups);
-localStorage.setItem(STORAGE_KEY, JSON.stringify(validGroups));
-    } 
-    catch(error){
-      console.log("failed to parse story Group" , error);
-      setStoryGroups([]);
-    }
-  },[]);
-/*addStory()
-  → create ONE story
-  → wrap it in ONE group
-  → push group into storyGroups[]
-*/
-const createNewStoryGroup = (imageBase) => {
-  const now = Date.now();
-
-  const newStory = {
-    id: crypto.randomUUID(),
-    image: imageBase,
-    createdAt: now,
-    expiresAt: now + DAY_IN_MS,
-    viewed: false,
   };
 
-  const newGroup = {
-    id: crypto.randomUUID(),
-    stories: [newStory],
+
+  const createNewStoryGroup = async (file) => {
+    const newStory = await createStoryObject(file);
+
+    setStoryGroups((prev) => {
+      const updated = [
+        { id: crypto.randomUUID(),stories:[newStory] },
+        ...prev,
+      ];
+      localStorage.setItem(STORAGE_KEY,JSON.stringify(updated));
+      return updated;
+    });
   };
 
-  setStoryGroups((prev) => {
-    const updated = [newGroup, ...prev];
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-    return updated;
-  });
-};
+    const addStoryToGroup = async (groupIndex, file) => {
+    const newStory = await createStoryObject(file);
+    setStoryGroups((prev) => {
+    if (!prev[groupIndex]) return prev;
 
-// add story to existing group
-const addStoryToGroup = (groupIndex, imageBase) => {
-  const now = Date.now();
-
-  const newStory = {
-    id: crypto.randomUUID(),
-    image: imageBase,
-    createdAt: now,
-    expiresAt: now + DAY_IN_MS,
-    viewed: false,
-  };
-
-  setStoryGroups((prev) => {
     const updated = [...prev];
-
     updated[groupIndex] = {
       ...updated[groupIndex],
       stories: [newStory, ...updated[groupIndex].stories],
     };
 
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+      return updated;
+    });
+  };
+    const removeStoryGroup = (groupIndex) => {
+    setStoryGroups((prev) => {
+    const updated = prev.filter((_, i) => i !== groupIndex);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
     return updated;
   });
 };
 
-
-return {
-  storyGroups,
-  createNewStoryGroup,
-  addStoryToGroup,
-};
-
+  return {
+    storyGroups,
+    createNewStoryGroup,
+    addStoryToGroup,
+    removeStoryGroup,
+  };
 }

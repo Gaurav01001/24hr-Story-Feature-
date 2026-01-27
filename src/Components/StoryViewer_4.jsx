@@ -29,6 +29,9 @@ import StoryProgress_5 from "./StoryProgress_5";
 
 export default function StoryViewer_4({
   story,
+  activeStoryIndex,
+  storyCount,
+  groupDirection,
   onNext,
   onPrev,
   onClose,
@@ -44,32 +47,67 @@ export default function StoryViewer_4({
     e.target.value = "";
   };
 
-  return (
-    <div className="story-viewer-overlay">
-      <div className="nav-zone left" onClick={onPrev}></div>
+return (
+  <div className="story-viewer-overlay">
+    {/* Progress bar - OUTSIDE content wrapper */}
+    <StoryProgress_5
+      duration={story.type === "video" ? 100000 : 6000}
+      onComplete={onNext}
+      activeStoryIndex={activeStoryIndex}
+      storyCount={storyCount}
+    />
 
-      <div className="story-viewer-content">
-        {/* INSIDE + BUTTON */}
-        <label className="story-add-btn">
-          +
-          <input
-            type="file"
-            accept="image/*"
-            hidden
-            onChange={handleFileChange}
+    {/* + Button - OUTSIDE content wrapper */}
+    <label className="story-add-btn">
+      +
+      <input
+        type="file"
+        accept="image/*,video/*"
+        hidden
+        onChange={handleFileChange}
+      />
+    </label>
+
+    {/* Content wrapper - ONLY for non-interactive display */}
+    <div className="story-viewer-content">
+      <div
+        key={story.id}
+        className={`story-image-wrapper ${
+          groupDirection ? `slide-${groupDirection}` : ""
+        }`}
+      >
+        {story.type === "image" && (
+          <img src={story.src} alt="story" />
+        )}
+
+        {story.type === "video" && (
+          <video
+            src={story.src}
+            autoPlay
+            playsInline
+            onEnded={onNext}
           />
-        </label>
-
-        <StoryProgress_5
-          duration={5000}
-          onComplete={onNext}
-          key={story.id}
-        />
-
-        <img src={story.image} alt="story" />
+        )}
       </div>
-
-      <div className="nav-zone right" onClick={onNext}></div>
     </div>
-  );
+
+    {/* Navigation zones - OUTSIDE content wrapper */}
+    <div
+      className="nav-zone left"
+      onClick={() => {
+        console.log("LEFT CLICK");
+        onPrev();
+      }}
+    />
+
+    <div
+      className="nav-zone right"
+      onClick={() => {
+        console.log("RIGHT CLICK");
+        onNext();
+      }}
+    />
+  </div>
+);
+
 }

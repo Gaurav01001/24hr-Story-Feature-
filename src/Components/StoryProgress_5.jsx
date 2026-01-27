@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react'
 //2 kam hai iska Show progress visually & Tell App when time is over
 import '../styles/viewer.css'
 
-export default function StoryProgress_5({duration, onComplete}){
+export default function StoryProgress_5({duration, onComplete, activeStoryIndex, storyCount}){
     const [progressing ,setProgressing] = useState(0);
     
 
  useEffect(() => {
+  setProgressing(0);
+
     const start = Date.now();
 
     const interval = setInterval(() => {
@@ -22,12 +24,24 @@ export default function StoryProgress_5({duration, onComplete}){
     }, 50);
  return () => clearInterval(interval);
       
-    },[duration, onComplete])
+    },[duration, onComplete, activeStoryIndex])
   return (
- <div className="progress-container">
-      <div className="progress-bar" style={{ width: `${progressing}%` }} />
+
+    <div className="progress-container">
+      {Array.from({length:storyCount}).map((_, i)=>{
+        let width;
+        if(i< activeStoryIndex) width =100;
+        else if( i === activeStoryIndex) width = progressing;
+        else width =0;
+        return(
+          <div className="progress-segment" key={i}>
+            <div className="progress-fill"
+            style={{width:`${width}%`}}
+            />
+          </div>
+        )
+      })}
     </div>
+
   )
 }
-
-

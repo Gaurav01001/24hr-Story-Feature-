@@ -3,7 +3,7 @@
   gap: 12px;
   padding: 12px;
   overflow-x: auto;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #8c3737;
 }
 
 .story-thumbnail {
@@ -12,7 +12,7 @@
   border-radius: 50%;
   flex-shrink: 0;
   overflow: hidden;
-  border: 2px solid #ff4d4f; /* placeholder ring */
+  border: 2px solid #4543c5; 
 }
 
 .story-thumbnail img {
@@ -27,7 +27,7 @@
   width: 64px;
   height: 64px;
   border-radius: 50%;
-  border: 3px dashed black ;
+  border: 3px dashed rgb(83, 42, 187) ;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -38,6 +38,6 @@
 .add-story-plus {
   font-size: 32px;
   font-weight: bold;
-  color: #555;
+  color: #222022;
 }
 

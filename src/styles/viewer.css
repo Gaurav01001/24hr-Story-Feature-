@@ -10,7 +10,7 @@
   justify-content: center;
 }
 
-/* Content wrapper */
+/* Content wrapper - MAKE TRANSPARENT TO CLICKS */
 .story-viewer-content {
   position: relative;
   width: 100%;
@@ -19,25 +19,31 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  
+  pointer-events: none; /* 🔥 Pass through all clicks */
 }
 
-/* Story image */
-.story-viewer-content img {
+/* Story image - ALSO TRANSPARENT */
+.story-viewer-content img,
+.story-viewer-content video {
   max-width: 100%;
   max-height: 100%;
-
   object-fit: contain;
   user-select: none;
+  
+  pointer-events: none; /* 🔥 Don't capture clicks */
 }
 
-/* Invisible navigation zones */
+/* Invisible navigation zones - RE-ENABLE CLICKS */
 .nav-zone {
   position: absolute;
   top: 0;
   bottom: 0;
   width: 50%;
-  z-index: 20;
-    pointer-events: none;
+  z-index: 10; /* 🔥 LOWERED from 20 */
+  
+  pointer-events: auto; /* 🔥 Make clickable */
+  cursor: pointer;
 }
 
 .nav-zone.left {
@@ -54,28 +60,36 @@
   top: 12px;
   left: 12px;
   right: 12px;
-  height: 4px;
 
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 2px;
-  overflow: hidden;
+  display: flex;
+  gap: 4px;
 
   z-index: 30;
   pointer-events: none;
 }
 
-/* Progress fill */
-.progress-bar {
+.progress-segment {
+  flex: 1;
+  height: 4px;
+  border: 2px solid red;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-fill {
   height: 100%;
   width: 0%;
   background: #fff;
-  border-radius: 2px;
+  transition: width 0.12s linear;
 }
+
+/* + button - RE-ENABLE CLICKS */
 .story-add-btn {
   position: absolute;
   top: 16px;
   right: 16px;
-  z-index: 5;
+  z-index: 40; /* 🔥 RAISED from 5 to be above everything */
 
   width: 36px;
   height: 36px;
@@ -91,4 +105,45 @@
   justify-content: center;
 
   cursor: pointer;
+  
+  pointer-events: auto; /* 🔥 Make clickable */
+  border: none; /* 🔥 Remove default button/label border */
+}
+
+/* Story wrapper */
+.story-image-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+/* Slide animations */
+.story-image-wrapper.slide-next {
+  animation: slideNext 0.25s ease-out;
+}
+
+.story-image-wrapper.slide-prev {
+  animation: slidePrev 0.25s ease-out;
+}
+
+/* Simple, fast keyframes */
+@keyframes slideNext {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slidePrev {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
 }

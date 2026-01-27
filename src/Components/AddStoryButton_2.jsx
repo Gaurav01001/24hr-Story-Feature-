@@ -14,7 +14,8 @@ export default function AddStoryButton_2  ({onSelect}) {
     <label className='add-story'>
       <input
        type="file" 
-       accept='image/*'
+      accept="image/*,video/*"
+
         hidden
         onChange={handleChange}
       />
